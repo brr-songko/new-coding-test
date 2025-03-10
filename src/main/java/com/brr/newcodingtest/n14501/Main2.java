@@ -3,9 +3,9 @@ package com.brr.newcodingtest.n14501;
 import java.io.*;
 import java.util.*;
 
-// dp 뒤에서부터 시작 하는 버전
+// dp 앞에서부터 시작하는 버전
 
-public class Main {
+public class Main2 {
     static int max = 0;
     static int N;
     static int[] T;
@@ -24,26 +24,13 @@ public class Main {
             P[i] = Integer.parseInt(st.nextToken());
         }
 
-        for (int i = N - 1; i >= 0; i--) {
-            if (i + T[i] > N) {
-                d[i] = d[i + 1];
-            } else {
-                d[i] = Math.max(d[i + 1], d[i + T[i]] + P[i]);
+        for (int i = 0; i < N; i++) {
+            if (i + T[i] <= N) {
+                d[i + T[i]] = Math.max(d[i + T[i]], d[i] + P[i]);
             }
+            d[i+1] = Math.max(d[i], d[i+1]);
         }
 
-        System.out.println(d[0]);
+        System.out.println(d[N]);
     }
 }
-
-
-/*
-
-max 값 정해놓고
-
-for문 돌면서 i번째부터 시작할 때의 값과 비교해서 가장 큰 녀석을 max로 하자.
-상담할지 말지 선택하는 조건문
-1. Ti값 + 현재 날짜 변수가 N보다 작거나 같은 경우
-2.
-
- */
