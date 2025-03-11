@@ -18,9 +18,7 @@ public class Main {
             }
         }
 
-//        sb.append("(");
         partition(0, 0, N);
-//        sb.append(")");
 
         System.out.println(sb);
     }
