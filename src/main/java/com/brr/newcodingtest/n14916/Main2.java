@@ -7,9 +7,9 @@ public class Main2 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
-        int max = Integer.MIN_VALUE;
+        int max = Integer.MAX_VALUE;
         boolean check = false;
-        for (int i = 0; i <= n / 5; i++) {
+        for (int i = 0; i <= n/5; i++) {
             int temp = n;
             int sum = 0;
             sum += i;
@@ -20,7 +20,7 @@ public class Main2 {
 //            System.out.println("2로 때로 나눈 temp = " + temp);
 //            System.out.println("sum = " + sum);
             if (temp == 0) {
-                max = Math.max(max, sum);
+                max = Math.min(max, sum);
                 check = true;
             }
         }
