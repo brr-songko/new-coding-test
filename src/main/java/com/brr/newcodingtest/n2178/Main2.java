@@ -7,48 +7,76 @@ public class Main2 {
     static int N, M;
     static int[][] A;
     static boolean[][] visited;
-    static int[] dy = {1, 0, -1, 0};
-    static int[] dx = {0, 1, 0, -1};
+    static int[] dx = {-1, 0, 1, 0};
+    static int[] dy = {0, 1, 0, -1};
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        A = new int[N][M];
-        visited = new boolean[N][M];
+        A = new int[N + 1][M + 1];
+        visited = new boolean[N + 1][M + 1];
 
-        for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            String line = st.nextToken();
-            for (int j = 0; j < M; j++) {
-                A[i][j] = Integer.parseInt(line.substring(j, j+1));
+        for (int i = 1; i <= N; i++) {
+            String s = br.readLine();
+            for (int j = 1; j <= M; j++) {
+                A[i][j] = Integer.parseInt(s.substring(j-1, j));
             }
         }
 
-        BFS(0, 0);
+        BFS(1, 1);
 
-        System.out.println(A[N-1][M-1]);
+        System.out.println(A[N][M]);
     }
 
-    public static void BFS(int i, int j) {
+    public static void BFS(int n, int m) {
         Queue<int[]> queue = new LinkedList<>();
-        queue.offer(new int[]{i,j});
-        visited[i][j] = true;
+        queue.offer(new int[]{n, m});
+        visited[n][m] = true;
 
         while (!queue.isEmpty()) {
             int[] temp = queue.poll();
-            for (int k = 0; k < 4; k++) {
-                int x = temp[0] + dx[k];
-                int y = temp[1] + dy[k];
-                if (x >= 0 && x < N && y >= 0 && y < M) {
-                    if (!visited[x][y] && A[x][y] != 0) {
-                        visited[x][y] = true;
-                        queue.offer(new int[]{x,y});
-                        A[x][y] = A[temp[0]][temp[1]] + 1;
+            int x = temp[0];
+            int y = temp[1];
+
+            for (int i = 0; i < 4; i++) {
+                int newX = x + dx[i];
+                int nexY = y + dy[i];
+
+                if (newX > 0 && newX <= N && nexY > 0 && nexY <= M) {
+                    if (!visited[newX][nexY] && A[newX][nexY] != 0) {
+                        queue.offer(new int[]{newX, nexY});
+                        visited[newX][nexY] = true;
+                        A[newX][nexY] = A[x][y] + 1;
                     }
                 }
             }
+
         }
     }
 }
+
+/*
+BFS
+
+int[][] A
+boolean[][] visited
+dx = {-1, 0, 1, 0}
+dy = {0, 1, 0, -1}
+
+BFS(1, 1)
+
+BFS {
+    Queue<int[]> queue = linkedList
+    queue.offer(new int[]{1, 1})
+    visited[1][1] = true
+
+    while(!queue.isEmpty) {
+        int[] temp = queue.poll()
+        int x = temp[0]
+        int y = temp[1]
+
+        if(
+    }
+}
+ */

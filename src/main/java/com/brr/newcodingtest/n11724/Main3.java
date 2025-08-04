@@ -3,26 +3,28 @@ package com.brr.newcodingtest.n11724;
 import java.io.*;
 import java.util.*;
 
-public class Main2 {
-    static ArrayList<Integer>[] A;
+public class Main3 {
+    static int answer, N, M;
     static boolean[] visited;
-    static int answer;
+    static ArrayList<Integer>[] list;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
-        A = new ArrayList[N + 1];
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
         visited = new boolean[N + 1];
+        list = new ArrayList[N + 1];
+
         for (int i = 1; i <= N; i++) {
-            A[i] = new ArrayList<>();
+            list[i] = new ArrayList<>();
         }
-        for (int i = 0; i < M; i++) {
+
+        for (int i = 1; i <= M; i++) {
             st = new StringTokenizer(br.readLine());
             int s = Integer.parseInt(st.nextToken());
             int e = Integer.parseInt(st.nextToken());
-            A[s].add(e);
-            A[e].add(s);
+            list[s].add(e);
+            list[e].add(s);
         }
 
         for (int i = 1; i <= N; i++) {
@@ -35,18 +37,15 @@ public class Main2 {
         System.out.println(answer);
     }
 
-    public static void dfs(int index) {
-        if (visited[index]) {
+    private static void dfs(int i) {
+        if (visited[i]) {
             return;
         }
 
-        visited[index] = true;
+        visited[i] = true;
 
-        for (int i = 0; i < A[index].size(); i++) {
-            int temp = A[index].get(i);
-            if (!visited[temp]) {
-                dfs(temp);
-            }
+        for (int j = 0; j < list[i].size(); j++) {
+            dfs(list[i].get(j));
         }
     }
 }

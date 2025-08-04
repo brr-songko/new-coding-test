@@ -4,30 +4,29 @@ import java.io.*;
 import java.util.*;
 
 public class Main3 {
-    static int N, K;
-    static int[] A;
-    static int count;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        K = Integer.parseInt(st.nextToken());
-        A = new int[N];
+        int N = Integer.parseInt(st.nextToken());
+        int K = Integer.parseInt(st.nextToken());
+        int[] A = new int[N];
+        int cnt = 0;
+
         for (int i = 0; i < N; i++) {
-            A[i] = Integer.parseInt(br.readLine());
+            st = new StringTokenizer(br.readLine());
+            A[i] = Integer.parseInt(st.nextToken());
         }
 
         for (int i = N - 1; i >= 0; i--) {
-            if (A[i] <= K) {
-                count += K/A[i];
-                K = K%A[i];
+            if (K >= A[i]) {
+                cnt += K / A[i];
+                K = K % A[i];
+            }
+            if (K == 0) {
+                break;
             }
         }
 
-        System.out.println(count);
+        System.out.println(cnt);
     }
 }
-
-/*
-동전 개수가 최소로 되려면 가장 큰
- */
