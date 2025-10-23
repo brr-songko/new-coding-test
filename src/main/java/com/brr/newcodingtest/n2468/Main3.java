@@ -21,7 +21,7 @@ public class Main3 {
             }
         }
 
-        for (int k = 1; k <= 100; k++) {
+        for (int k = 0; k <= 101; k++) {
             visited = new boolean[N][N];
             int temp = 0;
             for (int i = 0; i < N; i++) {
@@ -38,11 +38,10 @@ public class Main3 {
         System.out.println(answer);
     }
 
-    static int BFS(int a, int b, int height) {
+    static void BFS(int a, int b, int height) {
         Queue<int[]> queue = new LinkedList<>();
         queue.offer(new int[]{a, b});
         visited[a][b] = true;
-        int tempMax = 0;
 
         while (!queue.isEmpty()) {
             int[] temp = queue.poll();
@@ -61,7 +60,5 @@ public class Main3 {
                 visited[ny][nx] = true;
             }
         }
-
-        return tempMax;
     }
 }
