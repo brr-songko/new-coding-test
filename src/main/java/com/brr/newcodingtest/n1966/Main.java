@@ -12,41 +12,34 @@ public class Main {
             StringTokenizer st = new StringTokenizer(br.readLine());
             int N = Integer.parseInt(st.nextToken());
             int M = Integer.parseInt(st.nextToken());
-            int target = 0;
-            Queue<Integer> queue = new LinkedList<>();
-            int max = Integer.MIN_VALUE;
+            Queue<int[]> queue = new LinkedList<>();
             int answer = 0;
 
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < N; j++) {
                 int temp = Integer.parseInt(st.nextToken());
-                queue.offer(temp);
-                if (j == M) {
-                    target = temp;
-                }
+                queue.offer(new int[]{temp, j});
             }
 
-            while (!queue.isEmpty()) {
-                boolean check = true;
-                for (int j = 0; j < N; j++) {
-                    int temp = queue.poll();
-                    if (temp > max) {
-                        max = temp;
-                        check = false;
-                    }
-                    queue.offer(temp);
-                }
 
+            while (!queue.isEmpty()) {
+                boolean check = false;
+                int[] temp = queue.poll();
+                for (Iterator<int[]> iterator = queue.iterator(); iterator.hasNext();) {
+                    int[] arr = iterator.next();
+                    if (arr[0] > temp[0]) {
+                        check = true;
+                        break;
+                    }
+                }
                 if (check) {
-                    int temp = queue.poll();
+                    queue.offer(temp);
+                } else {
                     answer++;
-                    if (temp == target) {
+                    if (M == temp[1]) {
                         System.out.println(answer);
                         break;
                     }
-                } else {
-                    queue.offer(queue.poll());
-                    System.out.println("진입");
                 }
             }
         }
