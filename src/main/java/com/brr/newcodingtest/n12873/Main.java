@@ -13,19 +13,23 @@ public class Main {
             queue.offer(i);
         }
 
+        int t = 1;
         while (queue.size() > 1) {
-            for (int t = 1; t <= N; t++) {
-                int ts = (int) Math.pow(t, t);
-                System.out.println(queue);
+            long ts = (long) t *t*t;
+            ts %= queue.size();
 
-                for (int i = 0; i < ts; i++) {
-                    if (i == ts - 1) {
-                        queue.poll();
-                    } else {
-                        queue.offer(queue.poll());
-                    }
+            if (ts % queue.size() == 0) {
+                ts = queue.size();
+            }
+
+            for (int i = 0; i < ts; i++) {
+                if (i == ts - 1) {
+                    queue.poll();
+                } else {
+                    queue.offer(queue.poll());
                 }
             }
+            t++;
         }
 
         System.out.println(queue.peek());
