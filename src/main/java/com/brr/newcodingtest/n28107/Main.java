@@ -9,41 +9,34 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
-        int[] answerList = new int[N];
-        List<Queue<Integer>> list = new ArrayList<>();
-        for (int i = 0; i < N; i++) {
+        int[] answerList = new int[N + 1];
+        Map<Integer, Queue<Integer>> map = new HashMap<>();
+
+        for (int i = 1; i <= N; i++) {
             st = new StringTokenizer(br.readLine());
             int k = Integer.parseInt(st.nextToken());
-            Queue<Integer> queue = new LinkedList<>();
             for (int j = 0; j < k; j++) {
-                queue.offer(Integer.parseInt(st.nextToken()));
+                int order = Integer.parseInt(st.nextToken());
+                if (!map.containsKey(order)) {
+                    map.put(order, new LinkedList<>());
+                }
+                map.get(order).offer(i);
             }
-            list.add(queue);
         }
 
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < M; i++) {
             int food = Integer.parseInt(st.nextToken());
-            boolean check = false;
-            for (int j = 0; j < N; j++) {
-                Queue<Integer> nowQueue = list.get(j);
-                for (int k = 0; k < nowQueue.size(); k++) {
-                    int order = nowQueue.poll();
-                    if (order != food) {
-                        nowQueue.offer(order);
-                    } else {
-                        answerList[j]++;
-                        check = true;
-                        break;
-                    }
-                }
-                if (check) {
-                    break;
+            if (map.containsKey(food)) {
+                Queue<Integer> queue = map.get(food);
+                if (!queue.isEmpty()) {
+                    int now = queue.poll();
+                    answerList[now]++;
                 }
             }
         }
 
-        for (int i = 0; i < N; i++) {
+        for (int i = 1; i <= N; i++) {
             System.out.print(answerList[i] + " ");
         }
     }
