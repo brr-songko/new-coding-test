@@ -28,6 +28,52 @@ public class Main {
         cost = new int[N + 1];
         dist = new int[N + 1];
 
+        st = new StringTokenizer(br.readLine());
+        p = Integer.parseInt(st.nextToken());
+        q = Integer.parseInt(st.nextToken());
 
+        Arrays.fill(dist, -1);
+        Queue<int[]> queue = new LinkedList<>();
+        for (int i = 0; i < K; i++) {
+            int city = Integer.parseInt(br.readLine());
+            queue.offer(new int[]{city, 0});
+            isZombie[city] = true;
+            dist[city] = 0;
+        }
+
+        for (int i = 0; i < M; i++) {
+            st = new StringTokenizer(br.readLine());
+            int s = Integer.parseInt(st.nextToken());
+            int e = Integer.parseInt(st.nextToken());
+            list[s].add(e);
+            list[e].add(s);
+        }
+
+        findDangerCities(queue);
+
+        bfs();
+    }
+
+    static void findDangerCities(Queue<int[]> queue) {
+        while (!queue.isEmpty()) {
+            int[] cur = queue.poll();
+            int city = cur[0];
+            int depth = cur[1];
+
+            if (depth == S) continue;
+
+            for (int next : list[city]) {
+                if (dist[next] != -1) {
+                    dist[next] = depth + 1;
+                    isDanger[next] = true;
+                    queue.offer(new int[]{next, depth + 1});
+                }
+            }
+        }
+    }
+
+    static void bfs() {
+        PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> o2[1] - o1[1]);
+        
     }
 }
