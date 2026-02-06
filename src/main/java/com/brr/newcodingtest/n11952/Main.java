@@ -7,10 +7,9 @@ public class Main {
     static int N, M, K, S; // 도시 수, 도로 수, 점령 도시 개수, 위험 거리 기준
     static int p, q; // 안전 도시, 위험 도시 숙박 비용
     static ArrayList<Integer>[] list; // 도시 그래프
-    static boolean[] isZombie; // 해당 도시가 점령 도시인지
-    static boolean[] isDanger; // 해당 도시가 위험 도시인지
     static int[] cost; // 각 도시의 숙박 비용
     static int[] dist; // 좀비 도시로부터의 최단 거리
+    static long[] minCost; // 각 도시까지의 누적 최소 비용
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -23,21 +22,20 @@ public class Main {
         for (int i = 1; i <= N; i++) {
             list[i] = new ArrayList<>();
         }
-        isZombie = new boolean[N + 1];
-        isDanger = new boolean[N + 1];
         cost = new int[N + 1];
         dist = new int[N + 1];
+        minCost = new long[N + 1];
 
         st = new StringTokenizer(br.readLine());
         p = Integer.parseInt(st.nextToken());
         q = Integer.parseInt(st.nextToken());
 
         Arrays.fill(dist, -1);
+        Arrays.fill(minCost, Long.MAX_VALUE);
         Queue<int[]> queue = new LinkedList<>();
         for (int i = 0; i < K; i++) {
             int city = Integer.parseInt(br.readLine());
             queue.offer(new int[]{city, 0});
-            isZombie[city] = true;
             dist[city] = 0;
         }
 
@@ -51,7 +49,24 @@ public class Main {
 
         findDangerCities(queue);
 
-        bfs();
+        for (int i = 1; i <= N; i++) {
+            if (dist[i] == 0) {
+                cost[i] = -1;
+            } else if (dist[i] != -1 && dist[i] <= S) {
+                cost[i] = q;
+            } else {
+                cost[i] = p;
+            }
+        }
+
+        cost[N] = 0;
+        dijkstra();
+
+        if (minCost[N] == Long.MAX_VALUE) {
+            System.out.println(-1);
+        } else {
+            System.out.println(minCost[N]);
+        }
     }
 
     static void findDangerCities(Queue<int[]> queue) {
@@ -63,17 +78,36 @@ public class Main {
             if (depth == S) continue;
 
             for (int next : list[city]) {
-                if (dist[next] != -1) {
+                if (dist[next] == -1) {
                     dist[next] = depth + 1;
-                    isDanger[next] = true;
                     queue.offer(new int[]{next, depth + 1});
                 }
             }
         }
     }
 
-    static void bfs() {
-        PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> o2[1] - o1[1]);
-        
+    static void dijkstra() {
+        PriorityQueue<long[]> pq = new PriorityQueue<>((o1, o2) -> Long.compare(o1[1], o2[1]));
+        pq.offer(new long[]{1, 0});
+        minCost[1] = 0;
+
+        while (!pq.isEmpty()) {
+            long[] cur = pq.poll();
+            int city = (int)cur[0];
+            long curCost = cur[1];
+
+            if (curCost > minCost[city]) continue;
+
+            for (int next : list[city]) {
+                if (cost[next] == -1) continue;
+
+                long newCost = curCost + cost[next];
+
+                if (newCost < minCost[next]) {
+                    minCost[next] = newCost;
+                    pq.offer(new long[]{next, newCost});
+                }
+            }
+        }
     }
 }
