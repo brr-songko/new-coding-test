@@ -74,6 +74,9 @@ public class Main {
 
     static void bfs() {
         PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> o2[1] - o1[1]);
-        
+        pq.offer(new int[]{1, 0});
+        dist[1] = 0;
+
+
     }
 }
