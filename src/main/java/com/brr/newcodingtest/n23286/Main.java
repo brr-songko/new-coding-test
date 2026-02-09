@@ -6,18 +6,24 @@ import java.util.*;
 public class Main {
     static int N, M, T;
     static ArrayList<int[]>[] list;
-    static int[] minHeight;
+    static int[] minHeight, starts, ends, answers;
+    static final int INF = 1_000_000_000;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+        StringBuilder sb = new StringBuilder();
+
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         T = Integer.parseInt(st.nextToken());
+
         list = new ArrayList[N + 1];
         minHeight = new int[N + 1];
+
         for (int i = 1; i <= N; i++) {
             list[i] = new ArrayList<>();
         }
+
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
             int u = Integer.parseInt(st.nextToken());
@@ -26,16 +32,41 @@ public class Main {
             list[u].add(new int[]{v, h});
         }
 
-        for (int i = 0; i < T; i++) {
-            Arrays.fill(minHeight, Integer.MAX_VALUE);
+        Map<Integer, List<Integer>> queryMap = new HashMap<>();
+        starts = new int[T + 1];
+        ends = new int[T + 1];
+        answers = new int[T + 1];
+
+        for (int i = 1; i <= T; i++) {
              st = new StringTokenizer(br.readLine());
             int s = Integer.parseInt(st.nextToken());
             int e = Integer.parseInt(st.nextToken());
-            dijkstra(s);
 
-            if (minHeight[e] == Integer.MAX_VALUE) System.out.println(-1);
-            else System.out.println(minHeight[e]);
+            starts[i] = s;
+            ends[i] = e;
+
+            if (!queryMap.containsKey(s)) {
+                queryMap.put(s, new ArrayList<>());
+            }
+            queryMap.get(s).add(i);
         }
+
+        for (int key : queryMap.keySet()) {
+            Arrays.fill(minHeight, INF);
+            dijkstra(key);
+
+            for (int index : queryMap.get(key)) {
+                int ne = ends[index];
+                if (minHeight[ne] == INF) answers[index] = -1;
+                else answers[index] = minHeight[ne];
+            }
+        }
+
+        for (int i = 1; i <= T; i++) {
+            sb.append(answers[i]).append("\n");
+        }
+
+        System.out.println(sb);
     }
 
     static void dijkstra(int s) {
