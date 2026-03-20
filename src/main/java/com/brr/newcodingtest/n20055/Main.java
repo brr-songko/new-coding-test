@@ -33,6 +33,8 @@ public class Main {
     static void rotate() {
         int[] tempA = new int[2 * N + 1];
         int[] tempBelt = new int[2 * N + 1];
+
+
         for (int i = 1; i <= 2 * N; i++) {
             if (i == 2 * N) {
                 tempA[1] = A[2 * N];
