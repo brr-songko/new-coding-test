@@ -98,7 +98,6 @@ public class Main {
         for (int r = 0; r < d; r++) {
 //            반시계
 //            int temp = ay;
-            
 //            ay = ax;
 //            ax = -temp;
 //            시계
