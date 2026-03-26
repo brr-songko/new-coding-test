@@ -120,4 +120,3 @@ public class Main {
         map[y][x] = 0;
     }
 }
-

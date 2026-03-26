@@ -71,7 +71,7 @@ public class Main {
     }
 
     static void moveFireball() {
-        ArrayList<Fireball>[][] newMap = new ArrayList[N + 1][N + 1];
+        ArrayList<Fireball>[][] newMap = new ArrayList[N][N];
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 newMap[i][j] = new ArrayList<>();
@@ -83,8 +83,14 @@ public class Main {
                 if (map[i][j].size() >= 1) {
                     move = true;
                     for (Fireball fireball : map[i][j]) {
-                        int ny = ((i + dy[fireball.d] * fireball.s) + N )% N;
-                        int nx = ((j + dx[fireball.d] * fireball.s) + N )% N;
+                        int ny = ((i + dy[fireball.d] * fireball.s))% N;
+                        if (ny < 0) {
+                            ny += N;
+                        }
+                        int nx = ((j + dx[fireball.d] * fireball.s))% N;
+                        if (nx < 0) {
+                            nx += N;
+                        }
                         newMap[ny][nx].add(fireball);
                     }
                 }
@@ -114,7 +120,7 @@ public class Main {
                     }
                     mSum /= 5;
                     sSum /= map[i][j].size();
-                    if (dSum == 0 || dSum == 4) {
+                    if (dSum == 0 || dSum == map[i][j].size()) {
                         d1 = 0;
                         d2 = 2;
                         d3 = 4;
