@@ -137,7 +137,13 @@ public class Main {
 
                 if (ny < 0 || ny >= len || nx < 0 || nx >= len) continue;
                 if (map[ny][nx] <= 0) continue;
+
+
+                
                 if (visited[ny][nx]) continue;
+
+
+
 
                 q.offer(new int[]{ny, nx});
                 visited[ny][nx] = true;
