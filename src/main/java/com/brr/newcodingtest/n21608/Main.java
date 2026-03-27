@@ -44,6 +44,9 @@ public class Main {
 
         for (int i = 0; i < N * N; i++) {
             int student = order[i];
+
+
+
             int[] fav = map.get(student);
 
             List<Node> list = new ArrayList<>();
