@@ -5,9 +5,9 @@ import java.util.*;
 
 class Node {
     int to;
-    int cost;
+    long cost;
 
-    public Node(int to, int cost) {
+    public Node(int to, long cost) {
         this.to = to;
         this.cost = cost;
     }
@@ -16,9 +16,10 @@ class Node {
 public class Main {
 
     static ArrayList<Node>[] list;
-    static int N, answer;
+    static int N;
+    static long answer;
     static boolean[] visited;
-    static int[][] map;
+    static long[][] map;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -29,33 +30,35 @@ public class Main {
         }
         visited = new boolean[N + 1];
         visited[1] = true;
-        map = new int[N + 1][N + 1];
+        map = new long[N + 1][N + 1];
 
         for (int i = 1; i <= N; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             for (int j = 1; j <= N; j++) {
-                map[i][j] = Integer.parseInt(st.nextToken());
+                map[i][j] = Long.parseLong(st.nextToken());
             }
         }
 
         for (int i = 1; i <= N; i++) {
             for (int j = 1; j <= N; j++) {
-                int c = map[i][j];
+                long c = map[i][j];
                 if (c == 0) continue;
 
                 list[i].add(new Node(j, c));
             }
         }
 
-        answer = Integer.MAX_VALUE;
+        answer = Long.MAX_VALUE;
         dfs(1, 0, 0);
 
         System.out.println(answer);
     }
 
-    static void dfs(int s, int depth, int dist) {
+    static void dfs(int s, int depth, long dist) {
         if (depth == N - 1) {
-            answer = Math.min(dist + map[s][1], answer);
+            if (map[s][1] != 0) {
+                answer = Math.min(dist + map[s][1], answer);
+            }
             return;
         }
 
