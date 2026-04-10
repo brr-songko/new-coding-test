@@ -21,6 +21,9 @@ public class Main {
             long a = Long.parseLong(st.nextToken());
 
             totalPair += a / 2;
+
+
+
             g2 += (a - 1) / 2;
             if (a % 2 == 0) even++;
         }
