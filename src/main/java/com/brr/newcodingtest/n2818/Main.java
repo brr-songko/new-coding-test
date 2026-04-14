@@ -29,13 +29,6 @@ public class Main {
 
         // [5] 모든 행을 순서대로 처리
         for (long row = 0; row < R; row++) {
-            long top = dice[0];
-            long bottom = dice[1];
-            long north = dice[2];
-            long south = dice[3];
-            long east = dice[4];
-            long west = dice[5];
-
             // [5-1] 현재 행의 시작 칸 윗면을 합에 더할지 여부 생각
             // 첫 칸도 방문 칸이므로 윗면이 합에 포함됨
             answer += dice[0];
@@ -46,52 +39,6 @@ public class Main {
 
             // 이렇게 다시
             // [5-2] 현재 행의 나머지 이동 횟수
-// 힌트:
-// move = C - 1
-// full = move / 4  -> 주기 4가 몇 번 완전히 반복되는가
-// rem  = move % 4  -> 주기에서 몇 칸이 남는가
-//
-// sum = top + west + bottom + east  (오른쪽 기준 주기 합)
-// 또는
-// sum = top + east + bottom + west  (왼쪽 기준 주기 합)
-//
-// 단, 시작 칸 top은 이미 answer에 더했으므로
-// 추가 합에서는 "이동 후 나오는 윗면들"만 세야 함
-//
-// 즉 오른쪽 추가 순서:
-// 1칸 후 west
-// 2칸 후 bottom
-// 3칸 후 east
-// 4칸 후 top
-//
-// 왼쪽 추가 순서:
-// 1칸 후 east
-// 2칸 후 bottom
-// 3칸 후 west
-// 4칸 후 top
-            long sum = west + bottom + east + top;
-            long k = (C - 1) / 4L;
-            answer += sum * k;
-            if (toRight) {
-                if (k % 4 == 1) {
-                    answer += west;
-                } else if (k % 4 == 2) {
-                    answer += west + bottom;
-                } else if (k % 4 == 3) {
-                    answer += west + bottom + east;
-                }
-                // 왼쪽이면
-                // east -> bottom -> west -> top
-            } else {
-                if (k % 4 == 1) {
-                    answer += east;
-                } else if (k % 4 == 2) {
-                    answer += east + bottom;
-                } else if (k % 4 == 3) {
-                    answer += east + bottom + west;
-                }
-            }
-
 
             // 핵심 :
             // - 이동 횟수 k = C - 1
@@ -103,6 +50,13 @@ public class Main {
 
             // 여기도 이렇게 다시
             // [5-3] 한 행 끝까지 이동한 뒤의 주사위 상태 갱신
+            if (toRight) {
+                answer += getRightRowSum();
+                applyRightRowEndState();
+            } else {
+                answer += getLeftRowSum();
+                applyLeftRowEndState();
+            }
 // 힌트:
 // move = C - 1
 // rem = move % 4
@@ -119,11 +73,13 @@ public class Main {
             // [5-5] 아래로 한 칸 이동
             // 아래 이동도 주사위 면이 바뀜
             // TODO: dice를 "아래로 1칸 굴린 상태"로 갱신
+            rollDown();
 
             // [5-6] 방향 반전
             // 오른쪽 -> 왼쪽
             // 왼쪽 -> 오른쪽
             // TODO
+            toRight = !toRight;
         }
 
         // [6] 정답 출력
@@ -136,16 +92,47 @@ public class Main {
     // 이전 어떤 면이 되는지 직접 대입
     // TODO
     static void rollRight() {
+        long top = dice[0];
+        long bottom = dice[1];
+        long east = dice[4];
+        long west = dice[5];
+
+        dice[0] = west;
+        dice[1] = east;
+        dice[4] = top;
+        dice[5] = bottom;
     }
 
     // [B] 왼쪽으로 1칸 굴리는 함수
     // TODO
     static void rollLeft() {
+        long top = dice[0];
+        long bottom = dice[1];
+        long east = dice[4];
+        long west = dice[5];
+
+        dice[0] = east;
+        dice[1] = west;
+        dice[4] = bottom;
+        dice[5] = top;
     }
 
     // [C] 아래로 1칸 굴리는 함수
     // TODO
     static void rollDown() {
+        long top = dice[0];
+        long bottom = dice[1];
+        long north = dice[2];
+        long south = dice[3];
+
+//        dice[0] = north;
+//        dice[1] = south;
+//        dice[2] = bottom;
+//        dice[3] = top;
+        dice[0] = south;
+        dice[1] = north;
+        dice[2] = top;
+        dice[3] = bottom;
     }
 
     // ------------------------------------------------------------
@@ -163,7 +150,29 @@ public class Main {
     //
     // TODO
     static long getRightRowSum() {
-        return 0;
+        long sum = 0;
+        long k = C - 1;
+        long cycle = k / 4;
+        long rem = k % 4;
+        long cycleSum = 0;
+
+        long[] temp = dice.clone();
+
+        for (int i = 0; i < 4; i++) {
+            rollRight();
+            cycleSum += dice[0];
+        }
+
+        sum += cycleSum * cycle;
+
+        for (int i = 0; i < rem; i++) {
+            rollRight();
+            sum += dice[0];
+        }
+
+        dice = temp;
+
+        return sum;
     }
 
     // [E] 현재 행이 왼쪽 진행일 때,
@@ -172,7 +181,29 @@ public class Main {
     // 주기 배열: [east, bottom, west, top]
     // TODO
     static long getLeftRowSum() {
-        return 0;
+        long sum = 0;
+        long k = C - 1;
+        long cycle = k / 4;
+        long rem = k % 4;
+        long cycleSum = 0;
+
+        long[] temp = dice.clone();
+
+        for (int i = 0; i < 4; i++) {
+            rollLeft();
+            cycleSum += dice[0];
+        }
+
+        sum += cycleSum * cycle;
+
+        for (int i = 0; i < rem; i++) {
+            rollLeft();
+            sum += dice[0];
+        }
+
+        dice = temp;
+
+        return sum;
     }
 
     // ------------------------------------------------------------
@@ -184,10 +215,20 @@ public class Main {
     //
     // TODO
     static void applyRightRowEndState() {
+        long rem = (C - 1) % 4;
+
+        for (int i = 0; i < rem; i++) {
+            rollRight();
+        }
     }
 
     // [G] 왼쪽으로 (C-1)번 이동 후의 최종 상태 반영
     // TODO
     static void applyLeftRowEndState() {
+        long rem = (C - 1) % 4;
+
+        for (int i = 0; i < rem; i++) {
+            rollLeft();
+        }
     }
 }
