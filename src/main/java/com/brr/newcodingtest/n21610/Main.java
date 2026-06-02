@@ -10,6 +10,7 @@ public class Main {
     static boolean[][] isCloud;
     static List<int[]> list;
 //                    좌 좌상 상 우상 우 우하 하 좌하
+
     static int[] dy = {0, -1, -1, -1, 0, 1, 1, 1};
     static int[] dx = {-1, -1, 0, 1, 1, 1, 0, -1};
 
