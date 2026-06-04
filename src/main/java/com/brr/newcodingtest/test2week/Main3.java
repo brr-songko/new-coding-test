@@ -3,30 +3,62 @@ package com.brr.newcodingtest.test2week;
 import java.io.*;
 import java.util.*;
 
-class Tree {
-    String name;
-    double num;
-
-    public Tree (String name, double num) {
-        this.name = name;
-        this.num = num;
-    }
-}
-
 public class Main3 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        Map<String, Tree> map = new HashMap<>();
+        StringBuilder sb = new StringBuilder();
+        HashMap<String, Integer> map = new HashMap<>();
+
         String s;
-        while ((s = br.readLine()) != null) {
-            map.put(s, map.getOrDefault(s, new Tree(s, 0.0)));
+        while ((s = br.readLine()) != null && !s.isEmpty()) {
+            map.put(s, map.getOrDefault(s, 0) + 1);
         }
 
-        double sum = 0.0;
-        for (double n : map.values()) {
-            sum += n;
+        int total = 0;
+        for (int n : map.values()) {
+            total += n;
         }
 
-        List<Tree> list = map.
+        List<String> list = new ArrayList<>(map.keySet());
+        Collections.sort(list);
+
+        for (String key : list) {
+            double value = (double) map.get(key) / total * 100;
+
+            sb.append(key).append(" ").append(String.format("%.4f", value)).append("\n");
+        }
+        System.out.println(sb);
     }
 }
+
+/**
+ * Red Alder
+ * Ash
+ * Aspen
+ * Basswood
+ * Ash
+ * Beech
+ * Yellow Birch
+ * Ash
+ * Cherry
+ * Cottonwood
+ * Ash
+ * Cypress
+ * Red Elm
+ * Gum
+ * Hackberry
+ * White Oak
+ * Hickory
+ * Pecan
+ * Hard Maple
+ * White Oak
+ * Soft Maple
+ * Red Oak
+ * Red Oak
+ * White Oak
+ * Poplan
+ * Sassafras
+ * Sycamore
+ * Black Walnut
+ * Willow
+ */
