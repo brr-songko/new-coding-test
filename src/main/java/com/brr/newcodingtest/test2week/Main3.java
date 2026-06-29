@@ -3,30 +3,49 @@ package com.brr.newcodingtest.test2week;
 import java.io.*;
 import java.util.*;
 
+class Tree {
+    String name;
+    double num;
+
+    public Tree (String name, double num) {
+        this.name = name;
+        this.num = num;
+    }
+}
+
 public class Main3 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
-        HashMap<String, Integer> map = new HashMap<>();
-
+        Map<String, Tree> map = new HashMap<>();
         String s;
         while ((s = br.readLine()) != null && !s.isEmpty()) {
-            map.put(s, map.getOrDefault(s, 0) + 1);
+            if (!map.containsKey(s)) {
+                map.put(s, new Tree(s, 0));
+            }
+            map.get(s).num += 1;
+            System.out.println("sdf");
         }
 
-        int total = 0;
-        for (int n : map.values()) {
-            total += n;
+        double sum = 0.0;
+        for (Tree tree : map.values()) {
+            sum += tree.num;
         }
 
-        List<String> list = new ArrayList<>(map.keySet());
-        Collections.sort(list);
+        List<Tree> list = new ArrayList<>(map.values());
+        Collections.sort(list, new Comparator<Tree>() {
+            @Override
+            public int compare(Tree t1, Tree t2) {
+                return t1.name.compareTo(t2.name);
+            }
+        });
 
-        for (String key : list) {
-            double value = (double) map.get(key) / total * 100;
-
-            sb.append(key).append(" ").append(String.format("%.4f", value)).append("\n");
+        for (Tree tree : list) {
+            sb.append(tree.name).append(" ");
+            double value = Math.round((tree.num / sum) * 10000) / 10000.0;
+            sb.append(value).append("\n");
         }
+
         System.out.println(sb);
     }
 }
