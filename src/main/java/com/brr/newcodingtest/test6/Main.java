@@ -1,7 +1,6 @@
 package com.brr.newcodingtest.test6;
 
 import java.io.*;
-import java.util.*;
 
 public class Main {
 
@@ -9,6 +8,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
         int n = Integer.parseInt(br.readLine());
         int answer = 0;
         int target = 1000 - n;
@@ -32,18 +32,14 @@ public class Main {
 100 1개
 20
 
- */
-
-/*
-잔돈 500엔, 100엔, 50엔, 5엔, 1엔
+잔돈 500엔, 100엔, 50엔, 10엔, 5엔, 1엔
 거스름돈 개수가 가장 적게 잔돈
 1000엔 지폐를 냈을 때
-잔돈에 포함된 잔돈 갯수
+잔돈에 포함된 잔돈 개수
 
 380
 4
-
 1
-15
- */
-
+1
+5
+*/
