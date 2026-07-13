@@ -9,21 +9,21 @@ public class Main4 {
 
     static int N, answer;
     static int[][] D;
-    static int[][] dp; // [mask][cur]
+    static int[][] dp;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
         D = new int[N + 1][N + 1];
-        dp = new int[1 << N][N + 1];
-        for (int i = 0; i < dp.length; i++) {
-            Arrays.fill(dp[i], -1);
-        }
         for (int i = 1; i <= N; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             for (int j = 1; j <= N; j++) {
                 D[i][j] = Integer.parseInt(st.nextToken());
             }
+        }
+        dp = new int[1 << N][N + 1];
+        for (int[] temp : dp) {
+            Arrays.fill(temp, -1);
         }
 
         answer = solve(1, 1);
@@ -40,12 +40,12 @@ public class Main4 {
 
         int best = Integer.MAX_VALUE;
         for (int i = 1; i <= N; i++) {
-             int bit = 1 << (i - 1);
-             if ((mask & bit) == 0 && D[cur][i] != 0) {
-                 int nextResult = solve(mask | bit, i);
-                 if (nextResult == Integer.MAX_VALUE) continue;
-                 best = Math.min(best, D[cur][i] + nextResult);
-             }
+            int bit = 1 << (i -1);
+            if ((mask & bit) == 0 && D[cur][i] != 0) {
+                int nextResult = solve(mask | bit, i);
+                if (nextResult == Integer.MAX_VALUE) continue;
+                best = Math.min(best, nextResult + D[cur][i]);
+            }
         }
 
         dp[mask][cur] = best;
