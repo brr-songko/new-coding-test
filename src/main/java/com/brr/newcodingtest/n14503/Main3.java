@@ -37,58 +37,67 @@ public class Main3 {
     }
 
     public static void bfs() {
-        Queue<int[]> q = new LinkedList<>();
-        q.offer(new int[]{r, c, 0});
-
-        while (!q.isEmpty()) {
-            int[] temp = q.poll();
-            int y = temp[0];
-            int x = temp[1];
-            int cnt = temp[2];
-
-            if (map[y][x] == 0) {
-                map[y][x] = -1;
+        int cnt = 0;
+        while (true) {
+            int nextR = r;
+            int nextC = c;
+            int nextD = d;
+            // 1. 현재 위치를 청소한다.
+            if (map[r][c] == 0) {
+                map[r][c] = -1;
                 cnt++;
+            }
+
+            // 2. 왼쪽 방향부터 하나씩 탐색
+            // 2-1.왼쪽 방향에 아직 청소 x이면, 그 방향으로 회전하고 한 칸 전진.
+            int tempD = d - 1;
+            if (tempD == -1) tempD = 3;
+            int ny = r + dy[tempD];
+            int nx = c + dx[tempD];
+            if (ny < 0 || ny > N || nx < 0 || nx >= M) continue;
+            if (map[ny][nx] == 0) {
+                nextR = ny;
+                nextC = nx;
+                nextD = tempD;
+            } else {
+                // 2-2. 왼쪽에 청소할 공간 x이면, 그 방향으로 회전 후 2번으로 돌아감.
+                nextD = tempD;
             }
 
             boolean check = true;
             for (int i = 0; i < 4; i++) {
-                int ny = y + dy[i];
-                int nx = x + dx[i];
+                ny = r + dy[i];
+                nx = c + dx[i];
 
-                if (ny < 0 || ny >= N || nx < 0 || nx >= M) continue;
-                if (map[ny][nx] == 1) continue;
-
+                if (ny < 0 || ny > N || nx < 0 || nx >= M) continue;
                 if (map[ny][nx] == 0) {
                     check = false;
                     break;
                 }
             }
-
+            // 네 방향 모두 청소되어있거나 벽일경우,
             if (check) {
-                d = (d + 2) % 4;
-                int ny = y + dy[d];
-                int nx = x + dx[d];
+                tempD = (d + 2) % 4;
+                ny = r + dy[tempD];
+                nx = c + dx[tempD];
 
-                if (ny < 0 || ny >= N || nx < 0 || nx >= M) {
-                    answer = cnt;
-                    return;
-                }
+                if (ny < 0 || ny > N || nx < 0 || nx >= M) continue;
+
+                // 벽이라 후진도 못하면 작동 중지
                 if (map[ny][nx] == 1) {
                     answer = cnt;
-                    return;
-                }
-            } else {
-                d = d - 1;
-                if (d < 0) d = 3;
-                int ny = y + dy[d];
-                int nx = x + dx[d];
-
-                if (ny < 0 || ny >= N || nx < 0 || nx >= M) continue;
-                if (map[ny][nx] == 0) {
-                    q.offer(new int[]{ny, nx, cnt});
+                    break;
+                } else {
+                    // 바라보는 방향 유지한 채로 뒤로 한 칸.
+                    nextR = ny;
+                    nextC = nx;
+                    nextD = d;
                 }
             }
+
+            r = nextR;
+            c = nextC;
+            d = nextD;
         }
     }
 }
@@ -106,15 +115,17 @@ public class Main3 {
 7 4 0
 1 1 1 1 1 1 1 1 1 1
 1 0 0 0 0 0 0 0 0 1
+1 0 0 0 1 1 1 1 0 1
+1 0 0 1 1 0 0 0 0 1
+1 0 1 1 0 0 0 0 0 1
 1 0 0 0 0 0 0 0 0 1
-1 0 0 0 1 0 0 0 0 1
 1 0 0 0 0 0 0 1 0 1
-1 0 1 0 0 0 0 0 0 1
-1 0 0 0 0 0 0 0 1 1
-1 1 0 1 1 0 0 0 1 1
-1 0 0 0 1 1 0 0 1 1
+1 0 0 0 0 0 1 1 0 1
+1 0 0 0 0 0 1 1 0 1
 1 0 0 0 0 0 0 0 0 1
 1 1 1 1 1 1 1 1 1 1
+
+57
 
 57
  */
@@ -136,12 +147,10 @@ d = (d - 1) +
  */
 
 /*
-1. 아직 청소 x 이면 현재칸 청소
-2. 현재 칸 주변 4 칸중 청소되지 않은 칸이 없으면
-    1. 바라보는 방향 유지한 채로 뒤로 한 칸 후 1번 시작
-    2. 갈 수 없다면 동작 멈춤
-3. 주변 4칸 중 청소되지 않은 칸이 있다면
-    1. 반 시계 방향으로 90도 회전
-    2. 앞쪽 칸이 청소되지 않았다면 전진.
-    3. 1번으로 돌아감.
+
+2. 현재 방향 기준 왼쪽으로 인접칸 탐색
+    1. 왼쪽 방향에 청소 x 인 곳이 있으면, 그 방향으로 회전 후 한 칸 전진 후 1번 실행
+    2. 왼쪽 방향에 청소할 공간 x 이면, 그 방향으로 회전하고 2번으로 돌아감
+    3. 네 방향 모두 청소가 되어있거나 벽이면, 바라보는 방향 유지한 채로 한 칸 후진 후 2번 돌아감
+    4. 네 방향 모두 청소가 되어있거나 벽임녀서, 뒤쪽 방향이 벽이라 후진도 할 수 없으면 동작 멈춤.
  */
