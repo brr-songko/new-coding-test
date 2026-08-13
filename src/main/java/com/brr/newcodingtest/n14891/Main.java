@@ -35,6 +35,8 @@ public class Main {
         K = Integer.parseInt(br.readLine());
 
         for (int i = 0; i < K; i++) {
+            rotateDir = new int[4];
+            doRotate = new boolean[4];
 //            System.out.println("map");
 //            for (int j = 0; j < 4; j++) {
 //                for (int k = 0; k < 8; k++) {
@@ -45,6 +47,7 @@ public class Main {
             StringTokenizer st = new StringTokenizer(br.readLine());
             int target = Integer.parseInt(st.nextToken()) - 1;
             int dir = Integer.parseInt(st.nextToken());
+            doRotate[target] = true;
 
             // 현재 생각하고 있는 방법.
             // 현재 주어진 회전방향 리스트를 갱신함. int[] rotate. 오른쪽으로 총 4번 idx 옮기면서 idx 3 넘어가면 0 번으로 이동시켜줌.
@@ -79,7 +82,7 @@ public class Main {
             for (int j = target; j > 0; j--) {
                 Wheel now = wheels[j];
                 Wheel next = wheels[j - 1];
-                if (now.details[2] == next.details[6]) {
+                if (now.details[6] == next.details[2]) {
                     break;
                 } else {
                     doRotate[j] = true;
