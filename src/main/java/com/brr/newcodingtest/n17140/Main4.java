@@ -3,11 +3,11 @@ package com.brr.newcodingtest.n17140;
 import java.io.*;
 import java.util.*;
 
-class Number3 {
+class Number4 {
     int num;
     int cnt;
 
-    public Number3(int num, int cnt) {
+    public Number4(int num, int cnt) {
         this.num = num;
         this.cnt = cnt;
     }
@@ -57,7 +57,7 @@ public class Main4 {
 
         for (int i = 0; i < rowLength; i++) {
             HashMap<Integer, Integer> map = new HashMap<>();
-            List<Number3> list = new ArrayList<>();
+            List<Number4> list = new ArrayList<>();
             for (int j = 0; j < colLength; j++) {
                 int num = arr[i][j];
                 if (num == 0) continue;
@@ -65,7 +65,7 @@ public class Main4 {
             }
             col = Math.max(col, map.size() * 2);
             for (Integer key : map.keySet()) {
-                list.add(new Number3(key, map.get(key)));
+                list.add(new Number4(key, map.get(key)));
             }
             list.sort((a, b) -> {
                 if(a.cnt != b.cnt) return a.cnt - b.cnt;
@@ -73,7 +73,7 @@ public class Main4 {
             });
 
             for (int j = 0; j < list.size(); j++) {
-                Number3 number = list.get(j);
+                Number4 number = list.get(j);
                 copyArr[i][2 * j] =  number.num;
                 copyArr[i][2 * j + 1] = number.cnt;
             }
@@ -89,7 +89,7 @@ public class Main4 {
 
         for (int i = 0; i < colLength; i++) {
             HashMap<Integer, Integer> map = new HashMap<>();
-            List<Number3> list = new ArrayList<>();
+            List<Number4> list = new ArrayList<>();
             for (int j = 0; j < rowLength; j++) {
                 int num = arr[j][i];
                 if (num == 0) continue;
@@ -98,7 +98,7 @@ public class Main4 {
 
             row = Math.max(row, map.size() * 2);
             for (Integer key : map.keySet()) {
-                list.add(new Number3(key, map.get(key)));
+                list.add(new Number4(key, map.get(key)));
             }
             list.sort((a, b) -> {
                 if (a.cnt != b.cnt) return a.cnt - b.cnt;
@@ -106,7 +106,7 @@ public class Main4 {
             });
 
             for (int j = 0; j < list.size(); j++) {
-                Number3 number = list.get(j);
+                Number4 number = list.get(j);
                 copyArr[2 * j][i] = number.num;
                 copyArr[2 * j + 1][i] = number.cnt;
             }
