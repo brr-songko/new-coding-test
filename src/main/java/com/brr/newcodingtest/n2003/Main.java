@@ -10,13 +10,15 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
         int[] arr = new int[N];
+        st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
         int start = 0;
         int sum = 0;
-        int count = 0;
+        int answer = 0;
+
         for (int end = 0; end < N; end++) {
             sum += arr[end];
 
@@ -25,9 +27,21 @@ public class Main {
                 start++;
             }
 
-            if (sum == M) count++;
+            if (sum == M) answer++;
         }
 
-        System.out.println(count);
+        System.out.println(answer);
     }
 }
+
+/*
+4 2
+1 1 1 1
+
+3
+
+10 5
+1 2 3 4 2 5 3 1 1 2
+
+3
+ */
