@@ -2,30 +2,32 @@ package com.brr.newcodingtest.n10026;
 
 import java.io.*;
 import java.util.*;
+
 public class Main {
-    static int N;
+
+    static int N, answer;
+    static StringBuilder sb = new StringBuilder();
     static int[] dy = {-1, 0, 1, 0};
     static int[] dx = {0, 1, 0, -1};
+    static char[][] map;
     static boolean[][] visited;
-    static String[][] map;
+
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader (new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
-        map = new String[N][N];
+        map = new char[N][N];
         for (int i = 0; i < N; i++) {
             String s = br.readLine();
             for (int j = 0; j < N; j++) {
-                map[i][j] = s.substring(j, j+1);
+                map[i][j] = s.charAt(j);
             }
         }
 
         visited = new boolean[N][N];
-        int answer = 0;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 if (!visited[i][j]) {
-                    bfs(i, j);
+                    bfs(i, j, map[i][j]);
                     answer++;
                 }
             }
@@ -34,9 +36,7 @@ public class Main {
 
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if (map[i][j].equals("G")) {
-                    map[i][j] = "R";
-                }
+                if (map[i][j] == 'G') map[i][j] = 'R';
             }
         }
 
@@ -45,7 +45,7 @@ public class Main {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 if (!visited[i][j]) {
-                    bfs(i, j);
+                    bfs(i, j, map[i][j]);
                     answer++;
                 }
             }
@@ -55,27 +55,25 @@ public class Main {
         System.out.println(sb);
     }
 
-    static void bfs(int a, int b) {
-        Queue<int[]> queue = new LinkedList<>();
-        queue.offer(new int[]{a, b});
-        visited[a][b] = true;
+    public static void bfs(int r, int c, char ch) {
+        Queue<int[]> q = new LinkedList<>();
+        q.offer(new int[]{r, c});
+        visited[r][c] = true;
 
-        while (!queue.isEmpty()) {
-            int[] now = queue.poll();
-            int y = now[0];
-            int x = now[1];
-            String color = map[y][x];
+        while (!q.isEmpty()) {
+            int[] temp = q.poll();
+            int y = temp[0];
+            int x = temp[1];
 
             for (int i = 0; i < 4; i++) {
                 int ny = y + dy[i];
                 int nx = x + dx[i];
 
                 if (ny < 0 || ny >= N || nx < 0 || nx >= N) continue;
-                String nColor = map[ny][nx];
                 if (visited[ny][nx]) continue;
-                if (!color.equals(nColor)) continue;
+                if (map[ny][nx] != ch) continue;
 
-                queue.offer(new int[]{ny, nx});
+                q.offer(new int[]{ny, nx});
                 visited[ny][nx] = true;
             }
         }
