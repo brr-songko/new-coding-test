@@ -4,65 +4,64 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int N, count, answer;
-    static int[][] arr;
+
+    static int N, answer;
+    static int[][] map, copy_map;
     static boolean[][] visited;
     static int[] dy = {-1, 0, 1, 0};
     static int[] dx = {0, 1, 0, -1};
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
-        arr = new int[N][N];
+        map = new int[N][N];
 
-        int maxHeight = 0;
         for (int i = 0; i < N; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             for (int j = 0; j < N; j++) {
-                arr[i][j] = Integer.parseInt(st.nextToken());
-                if (arr[i][j] > maxHeight) {
-                    maxHeight = arr[i][j];
-                }
+                map[i][j] = Integer.parseInt(st.nextToken());
             }
         }
 
-
-        for (int k = 0; k <= maxHeight; k++) {
+        for (int h = 0; h <= 100; h++) {
             visited = new boolean[N][N];
-            count = 0;
+            int cnt = 0;
 
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
-                    if (!visited[i][j] && arr[i][j] > k) {
-                        BFS(i, j, k);
-                        count++;
+                    if (map[i][j] > h && !visited[i][j]) {
+                        bfs(i, j, h);
+                        cnt++;
                     }
                 }
             }
-            if (count > answer) {
-                answer = count;
-            }
+
+            answer = Math.max(answer, cnt);
         }
 
         System.out.println(answer);
     }
 
-    public static void BFS(int y, int x, int height) {
-        Queue<int[]> queue = new LinkedList<>();
-        queue.offer(new int[]{y, x});
-        visited[y][x] = true;
+    public static void bfs(int r, int c, int h) {
+        Queue<int[]> q = new LinkedList<>();
+        q.offer(new int[]{r, c});
+        visited[r][c] = true;
 
-        while (!queue.isEmpty()) {
-            int[] temp = queue.poll();
+        while (!q.isEmpty()) {
+            int[] temp = q.poll();
+            int y = temp[0];
+            int x = temp[1];
 
             for (int i = 0; i < 4; i++) {
-                int ny = temp[0] + dy[i];
-                int nx = temp[1] + dx[i];
-                if (ny < 0 || ny > N - 1 || nx < 0 || nx > N - 1) continue;
+                int ny = y + dy[i];
+                int nx = x + dx[i];
+
+                if (ny < 0 || ny >= N || nx < 0 || nx >= N) continue;
                 if (visited[ny][nx]) continue;
-                if (arr[ny][nx] > height) {
-                    queue.offer(new int[]{ny, nx});
-                    visited[ny][nx] = true;
-                }
+                if (map[ny][nx] <= h) continue;
+
+                q.offer(new int[]{ny, nx});
+                visited[ny][nx] = true;
             }
         }
     }

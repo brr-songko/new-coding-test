@@ -35,3 +35,11 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### 채점용 스크래치 파일 (Claude와 채점할 때 생기는 임시 컴파일/테스트 산출물) ###
+/_judge_run/
+/_judge_run2/
+/_judge_tmp/
+/_judge_tmp2/
+/_judge_tmp3/
+/_judge_tmp4/

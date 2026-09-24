@@ -3,11 +3,11 @@ package com.brr.newcodingtest.n1939;
 import java.io.*;
 import java.util.*;
 
-class Island {
+class Node2 {
     int v;
     long cost;
 
-    public Island(int v, long cost) {
+    public Node2(int v, long cost) {
         this.v = v;
         this.cost = cost;
     }
@@ -15,10 +15,12 @@ class Island {
 
 public class Main3 {
 
-    static int N, M, s, e;
-    static ArrayList<Island>[] list;
+    static ArrayList<Node2>[] list;
+    static int N, M;
+    static long answer, max;
+    static int start, end;
     static boolean[] visited;
-    static long max;
+    static boolean check;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -29,20 +31,24 @@ public class Main3 {
         for (int i = 1; i <= N; i++) {
             list[i] = new ArrayList<>();
         }
+
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            long c = Long.parseLong(st.nextToken());
-            list[a].add(new Island(b, c));
-            list[b].add(new Island(a, c));
-            max = Math.max(max, c);
+            int A = Integer.parseInt(st.nextToken());
+            int B = Integer.parseInt(st.nextToken());
+            long C = Long.parseLong(st.nextToken());
+            list[A].add(new Node2(B, C));
+            list[B].add(new Node2(A, C));
+            max = Math.max(max, C);
         }
-        st = new StringTokenizer(br.readLine());
-        s = Integer.parseInt(st.nextToken());
-        e = Integer.parseInt(st.nextToken());
 
-        System.out.println(binarySearch());
+        st = new StringTokenizer(br.readLine());
+        start = Integer.parseInt(st.nextToken());
+        end = Integer.parseInt(st.nextToken());
+
+        answer = binarySearch();
+
+        System.out.println(answer);
     }
 
     public static long binarySearch() {
@@ -52,33 +58,33 @@ public class Main3 {
 
         while (left < right) {
             mid = (left + right) / 2;
-            if (!canGo(mid)) right = mid;
+            if(!isPossible(mid)) right = mid;
             else left = mid + 1;
         }
 
         return left - 1;
     }
 
-    public static boolean canGo(long mid) {
-        visited = new boolean[N + 1];
-        Queue<Integer> q = new LinkedList<>();
-        q.offer(s);
-        visited[s] = true;
+    public static boolean isPossible(long mid) {
+        Queue<Integer> queue = new LinkedList<>();
+        boolean[] visited = new boolean[N + 1];
+        queue.offer(start);
+        visited[start] = true;
 
-        while (!q.isEmpty()) {
-            int v = q.poll();
+        while (!queue.isEmpty()) {
+            int v = queue.poll();
 
-            if (v == e) return true;
-
-            for (Island ni : list[v]) {
-                int nv = ni.v;
-                long nCost = ni.cost;
+            for (Node2 node : list[v]) {
+                int nv = node.v;
+                long nc = node.cost;
 
                 if (visited[nv]) continue;
-                if (nCost < mid) continue;
+                if (nc < mid) continue;
 
-                q.offer(nv);
+                queue.offer(nv);
                 visited[nv] = true;
+
+                if (nv == end) return true;
             }
         }
 

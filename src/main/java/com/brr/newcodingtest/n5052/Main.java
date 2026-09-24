@@ -4,51 +4,26 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-
-
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
         int t = Integer.parseInt(br.readLine());
         for (int i = 0; i < t; i++) {
             int n = Integer.parseInt(br.readLine());
-            String[] sList = new String[n];
+            String[] arr = new String[n];
             for (int j = 0; j < n; j++) {
-                sList[j] = br.readLine();
+                arr[j] = br.readLine();
             }
-
-            Arrays.sort(sList);
-
+            Arrays.sort(arr);
             boolean check = true;
             for (int j = 0; j < n - 1; j++) {
-                if (sList[j + 1].startsWith(sList[j])) {
-                    sb.append("NO").append("\n");
+                if (arr[j + 1].startsWith(arr[j])) {
                     check = false;
                     break;
                 }
             }
 
-            if (check) {
-                sb.append("YES").append("\n");
-            }
+            if (check) System.out.println("YES");
+            else System.out.println("NO");
         }
-
-        System.out.println(sb);
     }
 }
-
-/*
-2
-3
-911
-97625999
-91125426
-5
-113
-12340
-123440
-12345
-98346
-
- */

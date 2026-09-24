@@ -15,7 +15,9 @@ import java.util.*;
 public class Solution2 {
 
     public int[] solution(int[] enemy_power) {
-        // TODO: 처음부터 직접 구현
+        Arrays.sort(enemy_power);
+
+
         throw new UnsupportedOperationException("TODO");
     }
 

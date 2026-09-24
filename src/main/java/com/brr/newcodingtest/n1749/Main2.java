@@ -1,0 +1,42 @@
+package com.brr.newcodingtest.n1749;
+
+import java.io.*;
+import java.util.*;
+
+public class Main2 {
+
+    static int N, M;
+    static int[][] arr;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        arr = new int[N + 1][M + 1];
+
+        for (int i = 1; i <= N; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 1; j <= M; j++) {
+                arr[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
+
+        int answer = Integer.MIN_VALUE;
+        for (int r1 = 1; r1 <= N; r1++) {
+            int[] colSum = new int[M + 1];
+            for (int r2 = r1; r2 <= N; r2++) {
+                for (int c = 1; c <= M; c++) {
+                    colSum[c] += arr[r2][c];
+                }
+                int cur = 0;
+                for (int c = 1; c <= M; c++) {
+                    cur = Math.max(colSum[c], cur + colSum[c]);
+                    answer = Math.max(answer, cur);
+                }
+            }
+        }
+
+        System.out.println(answer);
+    }
+}

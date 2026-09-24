@@ -1,5 +1,6 @@
 package com.brr.newcodingtest.mock0724;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -11,9 +12,48 @@ import java.util.*;
  */
 public class Solution1 {
 
+    static int[][] dp; // dp[mask][cur]
+    static int[][] D;
+    static int n, fullMask;
+
     public int solution(int w, int h, int[] blocks) {
-        // TODO: 처음부터 직접 구현
-        throw new UnsupportedOperationException("TODO");
+        n = blocks.length;
+        fullMask = (1 << n) - 1;
+
+        int[][] coord = new int[n + 1][2];
+        for (int i = 1; i <= n; i++) {
+            int idx = blocks[i - 1] - 1;
+            coord[i][0] = idx / w;
+            coord[i][1] = idx % w;
+        }
+
+        D = new int[n + 1][n + 1];
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                D[i][j] = Math.abs(coord[i][0] - coord[j][0]) + Math.abs(coord[i][1] - coord[j][1]);
+            }
+        }
+
+        dp = new int[1 << n][n + 1];
+        for (int[] row : dp) Arrays.fill(row, -1);
+
+        return solve(1, 1);
+    }
+
+    public int solve(int mask, int cur) {
+        if (mask == fullMask) return 0;
+
+        if (dp[mask][cur] != -1) return dp[mask][cur];
+
+        int best = Integer.MAX_VALUE;
+        for (int i = 1; i <= n; i++) {
+            int bit = 1 << (i - 1);
+            if ((mask & bit) == 0) {
+                best = Math.min(best, solve(mask | bit, i) + D[cur][i]);
+            }
+        }
+
+        return dp[mask][cur] = best;
     }
 
     public static void main(String[] args) {
