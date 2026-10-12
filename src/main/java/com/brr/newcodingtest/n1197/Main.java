@@ -20,6 +20,7 @@ public class Main {
 
         for (int i = 0; i < V; i++) {
             parent[i] = i;
+            size[i] = 1;
         }
 
         for (int i = 0; i < E; i++) {
